@@ -8,7 +8,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`whoami.ds36.net`)
+    - match: Host(`whoami.ds36.net`) || Host(`whoami-prod.ds36.net`)
       kind: Rule
       services:
         - name: whoamiv1
