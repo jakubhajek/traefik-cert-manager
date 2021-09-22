@@ -12,10 +12,26 @@ globalArguments:
    - "--global.checknewversion"
    - "--global.sendanonymoususage"
 additionalArguments: []
+
 deployment:
   enabled: true
   replicas: 2  
+
 providers:
   kubernetesCRD:
     enabled: true
     allowCrossNamespace: true
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 60
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageUtilization: 60    
