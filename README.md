@@ -24,15 +24,16 @@ kubectl create namespace traefik
 helm upgrade --install traefik -f traefik/values.yaml traefik/traefik -n traefik
 ```
 
-## Configuring Cert Manager
+## Deploy Cert Manager 
 
-1. Install Cert-Manager [1.5.3](https://github.com/jetstack/cert-manager/releases/download/v1.5.3/cert-manager.yaml) 
+Install Cert-Manager [1.5.3](https://github.com/jetstack/cert-manager/releases/download/v1.5.3/cert-manager.yaml) 
 
 ```sh
 kubectl apply -f cert-manager/
 ```
 
-2. According to Cert-manager documentation, in order to use Cloudflare you have to create the appropriate API Token. In order to do that
+## Create Cloudflare API Token to manage your domain / domains
+According to Cert-manager documentation, in order to use Cloudflare you have to create the appropriate API Token. In order to do that
 you need to create create at User Profile -> API Tokens -> API Token. 
 
 The token needs to have the following settings:
@@ -42,7 +43,9 @@ The token needs to have the following settings:
  - Zone Resources:
    - Include - All Zones or Include - Specific Zone and Select the domain from the drop down list. 
 
-3. The API token should be places as the Kubernetes Secret. It can be created with the following command:
+## Configure Cert Manager and create the appropriate objects
+
+The API token should be places as the Kubernetes Secret. It can be created with the following command:
 
 ```sh
 kubectl create secret generic cloudflare-api-token-secret --from-literal=api-token=<API_TOKEN> -n cert-manager --dry-run=client -o yaml > cloudflare-api-token-secret.yaml
@@ -59,7 +62,7 @@ stringData:
   api-token: <API Token>
 ```
 
-4.  Then you need to create the Cluster Issuer that can be consumed in multiple namespaces. From the other hand Issuer is a namespaced scope.
+Then you need to create the Cluster Issuer that can be consumed in multiple namespaces. From the other hand Issuer is a namespaced scope.
 
 ```yaml
 apiVersion: cert-manager.io/v1
@@ -109,3 +112,5 @@ Just deploy the manifest using the command:
 ```sh
 kubectl apply -f whoami/
 ```
+
+In the created Ingressroute, TLS section (spec.tls) should refer to the Kubernetes secret that has been created by Certificate request for the domain. 
