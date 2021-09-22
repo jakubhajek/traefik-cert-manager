@@ -1,0 +1,17 @@
+logs:
+  general:
+    format: json
+    level: ERROR
+  access:
+    enabled: true
+    format: json
+globalArguments:
+    - "--global.checknewversion"
+additionalArguments: []
+deployment:
+  enabled: true
+  replicas: 2  
+providers:
+  kubernetesCRD:
+    enabled: true
+    allowCrossNamespace: true
