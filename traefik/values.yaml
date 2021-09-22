@@ -5,8 +5,12 @@ logs:
   access:
     enabled: true
     format: json
+ports:
+  web:  
+    redirectTo: websecure
 globalArguments:
-    - "--global.checknewversion"
+   - "--global.checknewversion"
+   - "--global.sendanonymoususage"
 additionalArguments: []
 deployment:
   enabled: true
